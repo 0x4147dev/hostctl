@@ -1,4 +1,4 @@
-#+TITLE: hostctl
+#+TITLE: Hostctl
 #+AUTHOR: 0x4147
 #+SUBTITLE: A useful tool to add entries to /etc/hosts file
 
