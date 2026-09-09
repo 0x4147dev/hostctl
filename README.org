@@ -1,0 +1,114 @@
+#+TITLE: hostctl
+#+AUTHOR: 0x4147
+#+SUBTITLE: A useful tool to add entries to /etc/hosts file
+
+* Introduction
+
+  =hostctl= is a simple and useful tool for pentesters to quickly add
+  or remove entries in the =/etc/hosts= file, without having to edit
+  it manually. It is handy during engagements when you need to point
+  a hostname to a specific IP (e.g. a target machine, a VHOST, a lab
+  environment) and keep those entries organized.
+
+* Requirements
+
+  - Python 3
+  - Root privileges (writing to =/etc/hosts= requires =sudo=)
+
+* Installation
+
+  #+begin_src sh
+git clone https://github.com/0x4147/hostctl.git
+cd hostctl
+chmod +x hostctl.py
+  #+end_src
+
+  Optionally, install it globally:
+
+  #+begin_src sh
+sudo cp hostctl.py /usr/local/bin/hostctl
+  #+end_src
+
+* Usage
+
+  #+begin_src 
+usage: hostctl [-h] {add,remove} ...
+
+Manage /etc/hosts entries.
+
+positional arguments:
+  {add,remove}
+    add         Add a host entry
+    remove      Remove a host entry by domain
+
+options:
+  -h, --help    show this help message and exit
+  #+end_src
+
+** Add a host entry
+
+   #+begin_src 
+usage: hostctl add [-h] ip domain
+
+positional arguments:
+  ip      IP address (e.g. 127.0.0.1)
+  domain  Domain name (e.g. target.local)
+
+options:
+  -h, --help  show this help message and exit
+   #+end_src
+
+   Example:
+
+   #+begin_src sh
+sudo hostctl add 10.10.10.10 target.local
+   #+end_src
+
+   #+begin_src 
+Added successfully: 10.10.10.10 -> target.local
+   #+end_src
+
+   If the domain is already present in the file, the script warns
+   you and does not add a duplicate entry.
+
+** Remove a host entry
+
+   #+begin_src 
+usage: hostctl remove [-h] domain
+
+positional arguments:
+  domain  Domain name to remove
+
+options:
+  -h, --help  show this help message and exit
+   #+end_src
+
+   Example:
+
+   #+begin_src sh
+sudo hostctl remove target.local
+   #+end_src
+
+   #+begin_src 
+[+] Remove successfully: target.local
+   #+end_src
+
+* Notes
+
+  - The script must be run with =sudo=, otherwise it exits with an
+    error (=[!] Error: run the script with sudo!=).
+  - Commented lines (starting with =#=) in =/etc/hosts= are left
+    untouched by the =remove= command.
+  - This tool only targets Unix-like systems (=/etc/hosts= is
+    hardcoded as the path).
+
+* Disclaimer
+
+  This tool is intended for use in authorized penetration testing,
+  lab environments, and local development only. Use it responsibly
+  and only on systems you own or are authorized to test.
+
+* License
+
+  This project is licensed under the MIT License — see the [[file:LICENSE][LICENSE]]
+  file for details.
